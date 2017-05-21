@@ -1,19 +1,19 @@
 const redis = require('redis');
 const config = require('../config');
-const client = redis.createClient({port: config.dbPort});
 
 class Database {
     constructor() {
-
+        this.client = null;
     }
 
     connect() {
+        this.client = redis.createClient({port: config.dbPort});
         return new Promise((resolve, reject) => {
-            client.on("error", (err) => {
+            this.client.on("error", (err) => {
                 console.log("Error " + err);
                 reject();
             });
-            client.on("connect", () => {
+            this.client.on("connect", () => {
                 resolve();
             });
         });
@@ -21,26 +21,26 @@ class Database {
 
     getCount() {
         return new Promise((resolve, reject) => {
-            client.get('count', (err, reply) => {
+            this.client.get('count', (err, count) => {
                 if (err) {
                     return reject(err);
                 }
-                resolve(reply);
+                resolve(count);
             });
         });
     }
 
     increaseCountBy(count) {
         return new Promise((resolve, reject) => {
-            client.incrby('count', count, (err, newCount) => {
-                    if(err) {
-                        return reject(err);
-                    }
-                    resolve(newCount);
+            this.client.incrby('count', count, (err, newCount) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(newCount);
             });
         });
-
     }
+
 }
 
 module.exports = Database;
