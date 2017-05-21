@@ -1,4 +1,4 @@
-# node application
+# Node application
 Node application with express.
 ## How to start application
 
