@@ -2,9 +2,10 @@
   "name": "node-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node ./src/app"
+    "start": "node ./src/app",
+    "test": "mocha ./src/tests"
   },
   "author": "",
   "license": "ISC",

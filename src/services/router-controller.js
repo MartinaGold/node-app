@@ -1,14 +1,15 @@
 const fs = require('fs');
 const config = require('../config.js');
+const db = require('../database/database');
 
 class RouterController {
 
-    static handleTrack(db, request, response) {
+    static handleTrack(request, response) {
         const count = request.body.count;
         const jsonString = JSON.stringify(request.body);
         if (count) {
             if (!isNaN(count)) {
-                increaseCountAndAppendToFile(db, request, jsonString).then(() => {
+                increaseCountAndAppendToFile(request, jsonString).then(() => {
                     response.status(200).json();
                 }).catch((err) => {
                     console.log(err);
@@ -26,7 +27,7 @@ class RouterController {
         }
     }
 
-    static handleCount(db, request, response) {
+    static handleCount(request, response) {
         db.getCount().then((count) => {
             response.status(200).json(count);
         }).catch((err) => {
@@ -37,7 +38,7 @@ class RouterController {
 
 }
 
-function increaseCountAndAppendToFile(db, request, jsonString) {
+function increaseCountAndAppendToFile(request, jsonString) {
     return Promise.all([db.increaseCountBy(request.body.count), appendToFile(config.logsPath, jsonString)])
 }
 

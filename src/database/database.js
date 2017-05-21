@@ -2,11 +2,8 @@ const redis = require('redis');
 const config = require('../config');
 
 class Database {
-    constructor() {
-        this.client = null;
-    }
 
-    connect() {
+    static connect() {
         this.client = redis.createClient({port: config.dbPort});
         return new Promise((resolve, reject) => {
             this.client.on("error", (err) => {
@@ -19,7 +16,7 @@ class Database {
         });
     }
 
-    getCount() {
+    static getCount() {
         return new Promise((resolve, reject) => {
             this.client.get('count', (err, count) => {
                 if (err) {
@@ -30,7 +27,7 @@ class Database {
         });
     }
 
-    increaseCountBy(count) {
+    static increaseCountBy(count) {
         return new Promise((resolve, reject) => {
             this.client.incrby('count', count, (err, newCount) => {
                 if (err) {

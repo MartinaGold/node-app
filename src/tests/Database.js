@@ -1,14 +1,11 @@
 const chai = require('chai');
 const expect = chai.expect;
 const should = chai.should();
-const Database = require('../database/database');
+const db = require('../database/database');
 
 describe('Database', () => {
 
-    let db;
-
     before(() => {
-        db = new Database();
         db.connect();
     });
 
